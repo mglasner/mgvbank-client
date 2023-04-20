@@ -1,3 +1,12 @@
+import Head from "next/head";
+
 export default function LogIn() {
-  return <h1>LogIn</h1>;
+  return (
+    <>
+      <Head>
+        <title>LogIn</title>
+      </Head>
+      <h1>LogIn</h1>
+    </>
+  );
 }

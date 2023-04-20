@@ -1,3 +1,12 @@
+import Head from "next/head";
+
 export default function Withdraw() {
-  return <h1>Withdraw</h1>;
+  return (
+    <>
+      <Head>
+        <title>Withdraw</title>
+      </Head>
+      <h1>Withdraw</h1>
+    </>
+  );
 }

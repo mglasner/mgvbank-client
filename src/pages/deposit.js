@@ -1,3 +1,12 @@
+import Head from "next/head";
+
 export default function Deposit() {
-  return <h1>Deposit</h1>;
+  return (
+    <>
+      <Head>
+        <title>Deposit</title>
+      </Head>
+      <h1>Deposit</h1>
+    </>
+  );
 }
