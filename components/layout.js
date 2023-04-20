@@ -54,6 +54,8 @@ export default function Layout({ children }) {
                     Withdraw
                   </Link>
                 </li>
+              </ul>
+              <ul className="navbar-nav ms-auto mb-2 mb-lg-0">
                 <li className="nav-item">
                   <Link
                     className={`nav-link ${
@@ -62,16 +64,28 @@ export default function Layout({ children }) {
                     href="/login"
                   >
                     Login
+                    <Image
+                      src="/images/log-in.svg"
+                      height={20}
+                      width={20}
+                      alt="bank logo"
+                    />
                   </Link>
                 </li>
                 <li className="nav-item">
                   <Link
                     className={`nav-link ${
-                      router.pathname === "/ginup" ? "active" : ""
+                      router.pathname === "/signup" ? "active" : ""
                     }`}
                     href="/signup"
                   >
                     Signup
+                    <Image
+                      src="/images/sign-up.svg"
+                      height={20}
+                      width={20}
+                      alt="bank logo"
+                    />
                   </Link>
                 </li>
               </ul>
