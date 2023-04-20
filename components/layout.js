@@ -10,14 +10,14 @@ export default function Layout({ children }) {
       <div className="container">
         <nav className="navbar navbar-expand-lg navbar-light bg-light">
           <div className="container-fluid">
-            <a className="navbar-brand" href="/">
+            <Link className="navbar-brand" href="/">
               <Image
                 src="/images/bank.svg"
                 height={60}
                 width={60}
                 alt="bank logo"
               />
-            </a>
+            </Link>
             <button
               className="navbar-toggler"
               type="button"
