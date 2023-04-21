@@ -1,13 +1,35 @@
-import { useState } from "react";
+"use client";
 import Head from "next/head";
+import { useRouter } from "next/navigation";
+
+import { useState, useEffect } from "react";
+
 import Layout from "../../components/layout";
 import Card from "../../components/card";
+
+import { onAuthStateChanged, getAuth } from "firebase/auth";
+import firebase_app from "@/firebase/config";
+
+const auth = getAuth(firebase_app);
 
 export default function Deposit() {
   const [show, setShow] = useState(true);
   const [status, setStatus] = useState("");
-  const [user, setUser] = useState("");
   const [deposit, setDeposit] = useState(0);
+  const [user, setUser] = useState(null);
+
+  const router = useRouter();
+
+  useEffect(() => {
+    onAuthStateChanged(auth, (user) => {
+      if (user) {
+        setUser(user);
+      } else {
+        setUser(null);
+        router.push("/");
+      }
+    });
+  }, [user]);
 
   const validateDeposit = function (field) {
     if (isNaN(field)) {
@@ -25,37 +47,20 @@ export default function Deposit() {
     return true;
   };
 
-  const validateUser = function (field) {
-    if (field === "") {
-      setStatus("Please select an user from the dropdown menu");
-      setUser("");
-      setTimeout(() => setStatus(""), 3000);
-      return false;
-    }
-    return true;
-  };
-
   const handleDeposit = function () {
-    if (!validateUser(user)) {
-      return;
-    }
     if (!validateDeposit(deposit)) {
       return;
     }
-    let current_user = findCurrentUser();
-    current_user.balance += deposit / 1;
-    current_user.history.unshift({ type: "deposit", amount: deposit });
-    setShow(false);
+    // let current_user = findCurrentUser();
+    // current_user.balance += deposit / 1;
+    // current_user.history.unshift({ type: "deposit", amount: deposit });
+    // setShow(false);
   };
 
   const clearForm = function () {
     setDeposit(0);
-    setUser("");
+    // setUser("");
     setShow(true);
-  };
-
-  const findCurrentUser = function () {
-    return "mgv";
   };
 
   return (
@@ -64,7 +69,7 @@ export default function Deposit() {
         <title>Deposit</title>
       </Head>
       <Card
-        header={`Balance: $lorem`}
+        header={`Balance: lala`}
         status={status}
         body={
           show ? (
@@ -83,9 +88,7 @@ export default function Deposit() {
               <br />
               <button
                 type="submit"
-                className={`btn btn-light ${
-                  user === "" && deposit === 0 ? "disabled" : ""
-                }`}
+                className={`btn btn-light ${deposit === 0 ? "disabled" : ""}`}
                 onClick={handleDeposit}
               >
                 Deposit
