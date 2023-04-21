@@ -16,6 +16,7 @@ export default function Layout({ children }) {
                 height={60}
                 width={60}
                 alt="bank logo"
+                priority
               />
             </Link>
             <button
