@@ -3,14 +3,7 @@ import Head from "next/head";
 import Layout from "../../components/layout";
 import Card from "../../components/card";
 
-import {
-  AuthAction,
-  useAuthUser,
-  withAuthUser,
-  withAuthUserTokenSSR,
-} from "next-firebase-auth";
-
-function Deposit() {
+export default function Deposit() {
   const [show, setShow] = useState(true);
   const [status, setStatus] = useState("");
   const [user, setUser] = useState("");
@@ -115,12 +108,3 @@ function Deposit() {
     </Layout>
   );
 }
-
-export const getServerSideProps = withAuthUserTokenSSR({
-  whenUnauthed: AuthAction.REDIRECT_TO_LOGIN,
-})(() => {
-  return {
-    props: {},
-  };
-});
-export default withAuthUser()(Deposit);
