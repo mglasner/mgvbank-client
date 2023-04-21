@@ -1,40 +1,27 @@
-import { useState } from "react";
 import Head from "next/head";
 import Layout from "../../components/layout";
-import Card from "../../components/card";
-import firebase from "firebase/app";
-import "firebase/auth";
-import { useRouter } from "next/router";
 
-// import {
-//   AuthAction,
-//   useAuthUser,
-//   withAuthUser,
-//   withAuthUserTokenSSR,
-// } from "next-firebase-auth";
+import { useRouter } from "next/router";
+import { useState } from "react";
+
+import Card from "../../components/card";
+import signUp from "@/firebase/auth/signup";
 
 export default function SignUp() {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const router = useRouter();
 
-  const handleCreateAccount = () => {
-    console.log(name, email, password);
-    firebase
-      .auth()
-      .createUserWithEmailAndPassword(email, password)
-      .then((userCredential) => {
-        let { user } = userCredential;
-        console.log(user);
-        let router = useRouter();
-        router.push("/");
-      })
-      .catch((error) => {
-        let errorCode = error.code;
-        let errorMessage = error.message;
-        console.log(errorCode);
-        console.log(errorMessage);
-      });
+  const handleCreateAccount = async (event) => {
+    event.preventDefault();
+    const { result, error } = await signUp(email, password);
+    if (error) {
+      return console.log(error);
+    }
+    // else successful
+    console.log(result);
+    return router.push("/");
   };
 
   return (
@@ -46,7 +33,7 @@ export default function SignUp() {
         header="Sign Up"
         status=""
         body={
-          <form>
+          <form onSubmit={handleCreateAccount}>
             <label htmlFor="name" className="form-label">
               Name
             </label>
@@ -81,12 +68,7 @@ export default function SignUp() {
               placeholder="Enter your password"
               onChange={(e) => setPassword(e.currentTarget.value)}
             />
-            <button
-              // type="submit"
-              type="button"
-              className="btn btn-light mt-3"
-              onClick={handleCreateAccount}
-            >
+            <button type="submit" className="btn btn-light mt-3">
               Create Account
             </button>
           </form>
@@ -95,13 +77,3 @@ export default function SignUp() {
     </Layout>
   );
 }
-
-// export const getServerSideProps = withAuthUserTokenSSR({
-//   whenAuthed: AuthAction.REDIRECT_TO_APP,
-//   appPageURL: "/",
-// })(() => {
-//   return {
-//     props: {},
-//   };
-// });
-// export default withAuthUser()(SignUp);
