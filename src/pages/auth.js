@@ -1,7 +1,7 @@
 import Head from "next/head";
 import Layout from "../../components/layout";
 
-export default function LogIn() {
+export default function Auth() {
   return (
     <Layout>
       <Head>
