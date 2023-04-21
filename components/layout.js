@@ -60,9 +60,9 @@ export default function Layout({ children }) {
                 <li className="nav-item">
                   <Link
                     className={`nav-link ${
-                      router.pathname === "/auth" ? "active" : ""
+                      router.pathname === "/login" ? "active" : ""
                     }`}
-                    href="/auth"
+                    href="/login"
                   >
                     Login
                     <Image
