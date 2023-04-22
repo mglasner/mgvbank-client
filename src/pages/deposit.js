@@ -51,15 +51,12 @@ export default function Deposit() {
     if (!validateDeposit(deposit)) {
       return;
     }
-    // let current_user = findCurrentUser();
-    // current_user.balance += deposit / 1;
-    // current_user.history.unshift({ type: "deposit", amount: deposit });
-    // setShow(false);
+    console.log("Making deposit ...");
+    setShow(false);
   };
 
   const clearForm = function () {
     setDeposit(0);
-    // setUser("");
     setShow(true);
   };
 
@@ -69,7 +66,7 @@ export default function Deposit() {
         <title>Deposit</title>
       </Head>
       <Card
-        header={`Balance: lala`}
+        header={`Balance: $${0}`}
         status={status}
         body={
           show ? (

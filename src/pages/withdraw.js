@@ -1,17 +1,37 @@
-import { useState } from "react";
+"use client";
 import Head from "next/head";
+import { useRouter } from "next/navigation";
+
+import { useState, useEffect } from "react";
+
 import Layout from "../../components/layout";
 import Card from "../../components/card";
+
+import { onAuthStateChanged, getAuth } from "firebase/auth";
+import firebase_app from "@/firebase/config";
+
+const auth = getAuth(firebase_app);
 
 export default function Withdraw() {
   const [show, setShow] = useState(true);
   const [status, setStatus] = useState("");
-  const [user, setUser] = useState("");
   const [withdraw, setWithdraw] = useState(0);
+  const [user, setUser] = useState("");
+
+  const router = useRouter();
+
+  useEffect(() => {
+    onAuthStateChanged(auth, (user) => {
+      if (user) {
+        setUser(user);
+      } else {
+        setUser(null);
+        router.push("/");
+      }
+    });
+  }, [user]);
 
   const validateWithdraw = function (field) {
-    let current_user = findCurrentUser();
-
     if (isNaN(field)) {
       setStatus("Please enter a valid number");
       setWithdraw(0);
@@ -24,37 +44,22 @@ export default function Withdraw() {
       setTimeout(() => setStatus(""), 3000);
       return false;
     }
-    if (field >= current_user.balance) {
-      setStatus(
-        `Maximum amount available to withdraw: $${current_user.balance}`
-      );
-      setWithdraw(0);
-      setTimeout(() => setStatus(""), 3000);
-      return false;
-    }
-    return true;
-  };
-
-  const validateUser = function (field) {
-    if (field === "") {
-      setStatus("Please select an user from the dropdown menu");
-      setUser("");
-      setTimeout(() => setStatus(""), 3000);
-      return false;
-    }
+    // if (field >= current_user.balance) {
+    //   setStatus(
+    //     `Maximum amount available to withdraw: $${current_user.balance}`
+    //   );
+    //   setWithdraw(0);
+    //   setTimeout(() => setStatus(""), 3000);
+    //   return false;
+    // }
     return true;
   };
 
   const handleWithdraw = function () {
-    if (!validateUser(user)) {
-      return;
-    }
     if (!validateWithdraw(withdraw)) {
       return;
     }
-    let current_user = findCurrentUser();
-    current_user.balance -= withdraw / 1;
-    current_user.history.unshift({ type: "withdraw", amount: withdraw });
+    console.log("Whitdrawing ...");
     setShow(false);
   };
 
@@ -64,9 +69,6 @@ export default function Withdraw() {
     setShow(true);
   };
 
-  const findCurrentUser = function () {
-    return "mgv";
-  };
   return (
     <Layout>
       <Head>
@@ -74,7 +76,7 @@ export default function Withdraw() {
       </Head>
       <Card
         bgcolor="dark"
-        header={`Balance: lorem`}
+        header={`Balance: $${0}`}
         status={status}
         body={
           show ? (
