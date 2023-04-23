@@ -76,6 +76,16 @@ export default function Navbar() {
                   Withdraw
                 </Link>
               </li>
+              <li className={`nav-item ${user ? "" : "d-none"}`}>
+                <Link
+                  className={`nav-link ${
+                    router.pathname === "/history" ? "active" : ""
+                  }`}
+                  href="/history"
+                >
+                  Transaction History
+                </Link>
+              </li>
             </ul>
             <ul className="navbar-nav ms-auto mb-2 mb-lg-0">
               <li className={`nav-item ${user ? "d-none" : ""}`}>
