@@ -32,15 +32,20 @@ export default function History() {
         );
         const userData = await response.json();
         setUser(userData);
-        setBalance(userData.history.reduce((acc, val) => acc + val, 0));
+        setBalance(
+          userData.history.reduce(
+            (acc, transaction) => acc + transaction.amount,
+            0
+          )
+        );
         setRows(
-          userData.history.map((value, idx) => {
+          userData.history.map((transaction, idx) => {
             return (
               <>
                 <tr key={idx} className="table-dark">
                   <td>{idx + 1}</td>
-                  <td>{Number(value) >= 0 ? "deposit" : "withdraw"}</td>
-                  <td>{value}</td>
+                  <td>{transaction.type}</td>
+                  <td>{transaction.amount}</td>
                 </tr>
               </>
             );

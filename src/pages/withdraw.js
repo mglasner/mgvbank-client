@@ -39,7 +39,12 @@ export default function Withdraw() {
           `http://localhost:3001/api/users/email/${firebaseUser.email}`
         );
         const userData = await response.json();
-        setBalance(userData.history.reduce((acc, val) => acc + val, 0));
+        setBalance(
+          userData.history.reduce(
+            (acc, transaction) => acc + transaction.amount,
+            0
+          )
+        );
       } catch (error) {
         console.error(error);
       }
