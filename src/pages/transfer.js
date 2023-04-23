@@ -105,14 +105,12 @@ export default function Transfer() {
       return;
     }
     try {
-      console.log("toUSer", toUser);
-      const response = await fetch(`http://localhost:3001/api/users/transfer`, {
+      await fetch(`http://localhost:3001/api/users/transfer`, {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ to: toUser, from: firebaseUser.email, amount }),
       });
 
-      console.log(await response.json());
       setBalance(Number(balance) - Number(amount));
       setShow(false);
     } catch (error) {
