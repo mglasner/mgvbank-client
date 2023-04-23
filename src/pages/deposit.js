@@ -16,7 +16,7 @@ export default function Deposit() {
   const [show, setShow] = useState(true);
   const [status, setStatus] = useState("");
   const [deposit, setDeposit] = useState(0);
-  const [user, setUser] = useState(null);
+  const [firebase_user, setUser] = useState(null);
 
   const router = useRouter();
 
@@ -29,7 +29,7 @@ export default function Deposit() {
         router.push("/");
       }
     });
-  }, [user]);
+  }, [firebase_user]);
 
   const validateDeposit = function (field) {
     if (isNaN(field)) {
@@ -47,11 +47,23 @@ export default function Deposit() {
     return true;
   };
 
-  const handleDeposit = function () {
+  const handleDeposit = async function () {
     if (!validateDeposit(deposit)) {
       return;
     }
-    console.log("Making deposit ...");
+    const response = await fetch(
+      `http://localhost:3001/api/users/deposit/${firebase_user.email}`,
+      {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ deposit }),
+      }
+    );
+
+    const data = await response.json();
+
+    console.log(data);
+
     setShow(false);
   };
 
