@@ -10,7 +10,6 @@ const auth = getAuth(firebase_app);
 
 export default function History() {
   const [firebaseUser, setFirebaseUser] = useState(null);
-  const [user, setUser] = useState({});
   const [rows, setRows] = useState([]);
   const [balance, setBalance] = useState(0);
 
@@ -34,7 +33,6 @@ export default function History() {
           `http://localhost:3001/api/users/email/${firebaseUser.email}`
         );
         const userData = await response.json();
-        setUser(userData);
         setBalance(
           userData.history.reduce(
             (acc, transaction) => acc + transaction.amount,
@@ -48,6 +46,7 @@ export default function History() {
                 <td>{idx + 1}</td>
                 <td>{transaction.type}</td>
                 <td>{transaction.amount}</td>
+                <td>{transaction.from || transaction.to || ""}</td>
               </tr>
             );
           })
@@ -61,20 +60,6 @@ export default function History() {
       fetchUserData();
     }
   }, [firebaseUser]);
-
-  const rows2 = () => {
-    user.history.map((value, idx) => {
-      return (
-        <>
-          <tr key={idx} className="table-dark">
-            <td>{idx}</td>
-            <td>{"deposit"}</td>
-            <td>{value}</td>
-          </tr>
-        </>
-      );
-    });
-  };
 
   return (
     <Layout>
@@ -92,6 +77,7 @@ export default function History() {
                 <th>#</th>
                 <th>Type</th>
                 <th>Amount</th>
+                <th>From / To</th>
               </tr>
             </thead>
             <tbody>{rows}</tbody>
