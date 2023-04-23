@@ -1,7 +1,6 @@
 "use client";
 import Head from "next/head";
 import { useRouter } from "next/navigation";
-
 import { useState, useEffect } from "react";
 
 import Layout from "../../components/layout";
@@ -13,23 +12,42 @@ import firebase_app from "@/firebase/config";
 const auth = getAuth(firebase_app);
 
 export default function Deposit() {
+  const [firebaseUser, setFirebaseUser] = useState(null);
   const [show, setShow] = useState(true);
   const [status, setStatus] = useState("");
   const [deposit, setDeposit] = useState(0);
-  const [firebase_user, setUser] = useState(null);
+  const [balance, setBalance] = useState(0);
 
   const router = useRouter();
 
   useEffect(() => {
     onAuthStateChanged(auth, (user) => {
       if (user) {
-        setUser(user);
+        setFirebaseUser(user);
       } else {
-        setUser(null);
+        setFirebaseUser(null);
         router.push("/");
       }
     });
-  }, [firebase_user]);
+  }, [firebaseUser]);
+
+  useEffect(() => {
+    const fetchUserData = async () => {
+      try {
+        const response = await fetch(
+          `http://localhost:3001/api/users/email/${firebaseUser.email}`
+        );
+        const userData = await response.json();
+        setBalance(userData.history.reduce((acc, val) => acc + val, 0));
+      } catch (error) {
+        console.error(error);
+      }
+    };
+
+    if (firebaseUser) {
+      fetchUserData();
+    }
+  }, [firebaseUser]);
 
   const validateDeposit = function (field) {
     if (isNaN(field)) {
@@ -52,7 +70,7 @@ export default function Deposit() {
       return;
     }
     const response = await fetch(
-      `http://localhost:3001/api/users/deposit/${firebase_user.email}`,
+      `http://localhost:3001/api/users/deposit/${firebaseUser.email}`,
       {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
@@ -61,9 +79,8 @@ export default function Deposit() {
     );
 
     const data = await response.json();
-
     console.log(data);
-
+    setBalance(Number(balance) + Number(deposit));
     setShow(false);
   };
 
@@ -78,7 +95,7 @@ export default function Deposit() {
         <title>Deposit</title>
       </Head>
       <Card
-        header={`Balance: $${0}`}
+        header={`Balance: $${balance}`}
         status={status}
         body={
           show ? (

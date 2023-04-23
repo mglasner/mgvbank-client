@@ -13,23 +13,42 @@ import firebase_app from "@/firebase/config";
 const auth = getAuth(firebase_app);
 
 export default function Withdraw() {
+  const [firebaseUser, setFirebaseUser] = useState("");
   const [show, setShow] = useState(true);
   const [status, setStatus] = useState("");
   const [withdraw, setWithdraw] = useState(0);
-  const [user, setUser] = useState("");
+  const [balance, setBalance] = useState(0);
 
   const router = useRouter();
 
   useEffect(() => {
     onAuthStateChanged(auth, (user) => {
       if (user) {
-        setUser(user);
+        setFirebaseUser(user);
       } else {
-        setUser(null);
+        setFirebaseUser(null);
         router.push("/");
       }
     });
-  }, [user]);
+  }, [firebaseUser]);
+
+  useEffect(() => {
+    const fetchUserData = async () => {
+      try {
+        const response = await fetch(
+          `http://localhost:3001/api/users/email/${firebaseUser.email}`
+        );
+        const userData = await response.json();
+        setBalance(userData.history.reduce((acc, val) => acc + val, 0));
+      } catch (error) {
+        console.error(error);
+      }
+    };
+
+    if (firebaseUser) {
+      fetchUserData();
+    }
+  }, [firebaseUser]);
 
   const validateWithdraw = function (field) {
     if (isNaN(field)) {
@@ -44,28 +63,36 @@ export default function Withdraw() {
       setTimeout(() => setStatus(""), 3000);
       return false;
     }
-    // if (field >= current_user.balance) {
-    //   setStatus(
-    //     `Maximum amount available to withdraw: $${current_user.balance}`
-    //   );
-    //   setWithdraw(0);
-    //   setTimeout(() => setStatus(""), 3000);
-    //   return false;
-    // }
+    if (field > balance) {
+      setStatus(`Maximum amount available to withdraw: $${balance}`);
+      setWithdraw(0);
+      setTimeout(() => setStatus(""), 3000);
+      return false;
+    }
     return true;
   };
 
-  const handleWithdraw = function () {
+  const handleWithdraw = async function () {
     if (!validateWithdraw(withdraw)) {
       return;
     }
-    console.log("Whitdrawing ...");
+    const response = await fetch(
+      `http://localhost:3001/api/users/withdraw/${firebaseUser.email}`,
+      {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ withdraw }),
+      }
+    );
+    const data = await response.json();
+    console.log(data);
+    setBalance(Number(balance) - Number(withdraw));
     setShow(false);
   };
 
   const clearForm = function () {
     setWithdraw(0);
-    setUser("");
+    setFirebaseUser("");
     setShow(true);
   };
 
@@ -76,7 +103,7 @@ export default function Withdraw() {
       </Head>
       <Card
         bgcolor="dark"
-        header={`Balance: $${0}`}
+        header={`Balance: $${balance}`}
         status={status}
         body={
           show ? (
@@ -96,7 +123,7 @@ export default function Withdraw() {
               <button
                 type="submit"
                 className={`btn btn-light ${
-                  user === "" && withdraw === 0 ? "disabled" : ""
+                  firebaseUser === "" && withdraw === 0 ? "disabled" : ""
                 }`}
                 onClick={handleWithdraw}
               >
