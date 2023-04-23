@@ -17,19 +17,13 @@ export default function SignUp() {
   const handleCreateAccount = async (event) => {
     event.preventDefault();
     try {
-      const firebase_user = await signUp(email, password);
-      console.log(firebase_user);
-
+      await signUp(email, password);
       const response = await fetch("http://localhost:3001/api/users", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ name, email }),
       });
-
       const data = await response.json();
-
-      console.log(data);
-
       router.push("/");
     } catch (error) {
       console.log(error);

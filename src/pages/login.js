@@ -16,8 +16,7 @@ export default function Login() {
   const handleLogIn = async (event) => {
     event.preventDefault();
     try {
-      const firebase_user = await signIn(email, password);
-      console.log(firebase_user);
+      await signIn(email, password);
       return router.push("/");
     } catch (error) {
       console.log(error);

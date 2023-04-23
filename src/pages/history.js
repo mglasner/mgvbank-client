@@ -4,6 +4,7 @@ import Card from "../../components/card";
 import { useState, useEffect } from "react";
 import { onAuthStateChanged, getAuth } from "firebase/auth";
 import firebase_app from "@/firebase/config";
+import { useRouter } from "next/navigation";
 
 const auth = getAuth(firebase_app);
 
@@ -12,6 +13,8 @@ export default function History() {
   const [user, setUser] = useState({});
   const [rows, setRows] = useState([]);
   const [balance, setBalance] = useState(0);
+
+  const router = useRouter();
 
   useEffect(() => {
     onAuthStateChanged(auth, (user) => {
@@ -41,13 +44,11 @@ export default function History() {
         setRows(
           userData.history.map((transaction, idx) => {
             return (
-              <>
-                <tr key={idx} className="table-dark">
-                  <td>{idx + 1}</td>
-                  <td>{transaction.type}</td>
-                  <td>{transaction.amount}</td>
-                </tr>
-              </>
+              <tr key={idx} className="table-dark">
+                <td>{idx + 1}</td>
+                <td>{transaction.type}</td>
+                <td>{transaction.amount}</td>
+              </tr>
             );
           })
         );
