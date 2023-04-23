@@ -79,6 +79,16 @@ export default function Navbar() {
               <li className={`nav-item ${user ? "" : "d-none"}`}>
                 <Link
                   className={`nav-link ${
+                    router.pathname === "/transfer" ? "active" : ""
+                  }`}
+                  href="/transfer"
+                >
+                  Transfer
+                </Link>
+              </li>
+              <li className={`nav-item ${user ? "" : "d-none"}`}>
+                <Link
+                  className={`nav-link ${
                     router.pathname === "/history" ? "active" : ""
                   }`}
                   href="/history"

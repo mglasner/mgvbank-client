@@ -116,10 +116,11 @@ export default function Deposit() {
                 value={deposit}
                 onChange={(e) => setDeposit(e.currentTarget.value)}
               />
-              <br />
               <button
                 type="submit"
-                className={`btn btn-light ${deposit === 0 ? "disabled" : ""}`}
+                className={`btn btn-light mt-3 ${
+                  deposit === 0 ? "disabled" : ""
+                }`}
                 onClick={handleDeposit}
               >
                 Deposit
