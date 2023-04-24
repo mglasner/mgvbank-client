@@ -30,7 +30,7 @@ export default function History() {
   useEffect(() => {
     const fetchUserData = async () => {
       try {
-        const response = await fetch(`${apiURL}/email/${firebaseUser.email}`);
+        const response = await fetch(`${apiURL}/${firebaseUser.email}`);
         const userData = await response.json();
         setBalance(
           userData.history.reduce(
