@@ -14,6 +14,7 @@ export default function History() {
   const [balance, setBalance] = useState(0);
 
   const router = useRouter();
+  const apiURL = process.env.NEXT_PUBLIC_API_URL;
 
   useEffect(() => {
     onAuthStateChanged(auth, (user) => {
@@ -29,9 +30,7 @@ export default function History() {
   useEffect(() => {
     const fetchUserData = async () => {
       try {
-        const response = await fetch(
-          `http://localhost:3001/api/users/email/${firebaseUser.email}`
-        );
+        const response = await fetch(`${apiURL}/email/${firebaseUser.email}`);
         const userData = await response.json();
         setBalance(
           userData.history.reduce(

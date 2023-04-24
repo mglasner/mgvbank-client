@@ -15,6 +15,7 @@ export default function SignUp() {
   const [status, setStatus] = useState("");
 
   const router = useRouter();
+  const apiURL = process.env.NEXT_PUBLIC_API_URL;
 
   const handleCreateAccount = async (event) => {
     event.preventDefault();
@@ -24,7 +25,7 @@ export default function SignUp() {
         setStatus(firebaseResponse.error.code);
         setTimeout(() => setStatus(""), 3000);
       } else {
-        await fetch("http://localhost:3001/api/users", {
+        await fetch(`${apiURL}`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ name, email }),

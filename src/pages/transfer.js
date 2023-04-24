@@ -21,6 +21,7 @@ export default function Transfer() {
   const [balance, setBalance] = useState(0);
 
   const router = useRouter();
+  const apiURL = process.env.NEXT_PUBLIC_API_URL;
 
   useEffect(() => {
     onAuthStateChanged(auth, (user) => {
@@ -36,9 +37,7 @@ export default function Transfer() {
   useEffect(() => {
     const fetchUserData = async () => {
       try {
-        const response = await fetch(
-          `http://localhost:3001/api/users/email/${firebaseUser.email}`
-        );
+        const response = await fetch(`${apiURL}/email/${firebaseUser.email}`);
         const userData = await response.json();
         setBalance(
           userData.history.reduce(
@@ -59,7 +58,7 @@ export default function Transfer() {
   useEffect(() => {
     const fetchUsers = async () => {
       try {
-        const response = await fetch(`http://localhost:3001/api/users/`);
+        const response = await fetch(`${apiURL}`);
         const usersData = await response.json();
         const usersEmail = usersData.map((userData) => {
           return userData.email;
@@ -105,7 +104,7 @@ export default function Transfer() {
       return;
     }
     try {
-      await fetch(`http://localhost:3001/api/users/transfer`, {
+      await fetch(`${apiURL}/transfer`, {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ to: toUser, from: firebaseUser.email, amount }),

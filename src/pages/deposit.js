@@ -19,6 +19,7 @@ export default function Deposit() {
   const [balance, setBalance] = useState(0);
 
   const router = useRouter();
+  const apiURL = process.env.NEXT_PUBLIC_API_URL;
 
   useEffect(() => {
     onAuthStateChanged(auth, (user) => {
@@ -34,9 +35,7 @@ export default function Deposit() {
   useEffect(() => {
     const fetchUserData = async () => {
       try {
-        const response = await fetch(
-          `http://localhost:3001/api/users/email/${firebaseUser.email}`
-        );
+        const response = await fetch(`${apiURL}/email/${firebaseUser.email}`);
         const userData = await response.json();
         setBalance(
           userData.history.reduce(
@@ -74,14 +73,11 @@ export default function Deposit() {
     if (!validateDeposit(deposit)) {
       return;
     }
-    const response = await fetch(
-      `http://localhost:3001/api/users/deposit/${firebaseUser.email}`,
-      {
-        method: "PATCH",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ deposit }),
-      }
-    );
+    const response = await fetch(`${apiURL}/deposit/${firebaseUser.email}`, {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ deposit }),
+    });
 
     const data = await response.json();
     console.log(data);

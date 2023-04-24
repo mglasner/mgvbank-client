@@ -20,6 +20,7 @@ export default function Withdraw() {
   const [balance, setBalance] = useState(0);
 
   const router = useRouter();
+  const apiURL = process.env.NEXT_PUBLIC_API_URL;
 
   useEffect(() => {
     onAuthStateChanged(auth, (user) => {
@@ -35,9 +36,7 @@ export default function Withdraw() {
   useEffect(() => {
     const fetchUserData = async () => {
       try {
-        const response = await fetch(
-          `http://localhost:3001/api/users/email/${firebaseUser.email}`
-        );
+        const response = await fetch(`${apiURL}/email/${firebaseUser.email}`);
         const userData = await response.json();
         setBalance(
           userData.history.reduce(
@@ -81,14 +80,11 @@ export default function Withdraw() {
     if (!validateWithdraw(withdraw)) {
       return;
     }
-    const response = await fetch(
-      `http://localhost:3001/api/users/withdraw/${firebaseUser.email}`,
-      {
-        method: "PATCH",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ withdraw }),
-      }
-    );
+    const response = await fetch(`${apiURL}/withdraw/${firebaseUser.email}`, {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ withdraw }),
+    });
     const data = await response.json();
     console.log(data);
     setBalance(Number(balance) - Number(withdraw));
