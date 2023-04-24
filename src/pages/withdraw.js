@@ -117,6 +117,8 @@ export default function Withdraw() {
                 Withdraw
               </label>
               <input
+                required
+                min={0}
                 type="number"
                 className="form-control"
                 id="withdraw"

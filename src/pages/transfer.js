@@ -136,7 +136,7 @@ export default function Transfer() {
             <>
               <select
                 name="users"
-                className="form-control"
+                className="form-select"
                 onChange={(e) => setToUser(e.currentTarget.value)}
               >
                 <option value="" key="-1"></option>
@@ -151,6 +151,7 @@ export default function Transfer() {
               </label>
               <input
                 required
+                min={0}
                 type="number"
                 className="form-control"
                 id="amount"

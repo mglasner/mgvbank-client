@@ -109,6 +109,8 @@ export default function Deposit() {
                 Deposit
               </label>
               <input
+                required
+                min={0}
                 type="number"
                 className="form-control"
                 id="deposit"
