@@ -1,0 +1,32 @@
+/* Default styles for card */
+.card {
+  width: 95%;
+}
+
+/* Media query for screens larger than 576px */
+@media screen and (min-width: 576px) {
+  .card {
+    width: 90%;
+  }
+}
+
+/* Media query for screens larger than 768px */
+@media screen and (min-width: 768px) {
+  .card {
+    width: 85%;
+  }
+}
+
+/* Media query for screens larger than 992px */
+@media screen and (min-width: 992px) {
+  .card {
+    width: 75%;
+  }
+}
+
+/* Media query for screens larger than 1200px */
+@media screen and (min-width: 1200px) {
+  .card {
+    width: 65%;
+  }
+}
