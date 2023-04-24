@@ -23,8 +23,8 @@ export default function Navbar() {
 
   const handleLogOut = async function () {
     try {
-      let result = await signOut(auth);
-      console.log(result);
+      await signOut(auth);
+      setUser(null);
     } catch (e) {
       console.log(e);
     }
@@ -136,7 +136,7 @@ export default function Navbar() {
                 </Link>
               </li>
               <li className={`nav-item ${user ? "" : "d-none"}`}>
-                <Link className="nav-link" href="#" onClick={handleLogOut}>
+                <Link className="nav-link" href="/" onClick={handleLogOut}>
                   Logout
                   <Image
                     src="/images/log-out.svg"
