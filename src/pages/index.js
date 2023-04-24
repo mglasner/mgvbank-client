@@ -55,7 +55,7 @@ export default function Home() {
         header="MGVBANK"
         title={
           firebaseUser
-            ? `Hi ${user.name}, your current balance si $${balance}`
+            ? `Hi ${user.name}, your current balance is $${balance}`
             : "¡Welcome!"
         }
         text={firebaseUser ? `Your shortcuts:` : ""}
