@@ -12,6 +12,7 @@ export default function Home() {
   const [firebaseUser, setFirebaseUser] = useState(null);
   const [balance, setBalance] = useState(0);
   const [user, setUser] = useState({});
+  const apiURL = process.env.NEXT_PUBLIC_API_URL;
 
   useEffect(() => {
     onAuthStateChanged(auth, (user) => {
@@ -26,9 +27,7 @@ export default function Home() {
   useEffect(() => {
     const fetchUserData = async () => {
       try {
-        const response = await fetch(
-          `http://localhost:3001/api/users/email/${firebaseUser.email}`
-        );
+        const response = await fetch(`${apiURL}/email/${firebaseUser.email}`);
         const userData = await response.json();
         setUser(userData);
         setBalance(
