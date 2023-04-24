@@ -71,17 +71,20 @@ export default function History() {
         bgcolor="dark"
         title="Transaction History"
         body={
-          <table className="table table-striped table-hover">
-            <thead>
-              <tr className="table-dark">
-                <th>#</th>
-                <th>Type</th>
-                <th>Amount</th>
-                <th>From / To</th>
-              </tr>
-            </thead>
-            <tbody>{rows}</tbody>
-          </table>
+          <div className="table-responsive">
+            <table className="table table-striped table-hover">
+              <caption>history</caption>
+              <thead>
+                <tr className="table-dark">
+                  <th>#</th>
+                  <th>Type</th>
+                  <th>Amount</th>
+                  <th>From / To</th>
+                </tr>
+              </thead>
+              <tbody>{rows}</tbody>
+            </table>
+          </div>
         }
       ></Card>
     </Layout>
