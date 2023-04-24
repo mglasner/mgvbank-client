@@ -12,19 +12,25 @@ export default function SignUp() {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [status, setStatus] = useState("");
+
   const router = useRouter();
 
   const handleCreateAccount = async (event) => {
     event.preventDefault();
     try {
-      await signUp(email, password);
-      const response = await fetch("http://localhost:3001/api/users", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ name, email }),
-      });
-      const data = await response.json();
-      router.push("/");
+      const firebaseResponse = await signUp(email, password);
+      if (firebaseResponse.error !== null) {
+        setStatus(firebaseResponse.error.code);
+        setTimeout(() => setStatus(""), 3000);
+      } else {
+        await fetch("http://localhost:3001/api/users", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ name, email }),
+        });
+        router.push("/");
+      }
     } catch (error) {
       console.log(error);
     }
@@ -37,7 +43,7 @@ export default function SignUp() {
       </Head>
       <Card
         header="Sign Up"
-        status=""
+        status={status}
         body={
           <form onSubmit={handleCreateAccount}>
             <label htmlFor="name" className="form-label">
@@ -67,7 +73,7 @@ export default function SignUp() {
             </label>
             <input
               required
-              minLength={5}
+              minLength={6}
               type="password"
               className="form-control mb-1"
               id="password"

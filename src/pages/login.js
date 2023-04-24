@@ -11,13 +11,20 @@ import signIn from "@/firebase/auth/signin";
 export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [status, setStatus] = useState("");
+
   const router = useRouter();
 
   const handleLogIn = async (event) => {
     event.preventDefault();
     try {
-      await signIn(email, password);
-      return router.push("/");
+      const response = await signIn(email, password);
+      if (response.error !== null) {
+        setStatus(response.error.code);
+        setTimeout(() => setStatus(""), 3000);
+      } else {
+        return router.push("/");
+      }
     } catch (error) {
       console.log(error);
     }
@@ -30,7 +37,7 @@ export default function Login() {
       </Head>
       <Card
         header="Log In"
-        status=""
+        status={status}
         body={
           <form onSubmit={handleLogIn}>
             <label htmlFor="email" className="form-label">
